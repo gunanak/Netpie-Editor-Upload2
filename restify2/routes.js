@@ -47,19 +47,6 @@ module.exports = function(app) {
 		      return db.collection('user_file').find().toArrayAsync();
 		    }
 		  });
-
-		  // db.collection('user_directory').find({uid:str_uid},(err,result)=>{
-				// 	if(!err){
-						
-				// 					// return res.json(result)
-				// 	}else console.log('get userdata error : '+err);
-				// }).toArrayAsync() .then(function(doc) {
-				// 	console.log('4')
-				// })			
-
-
-
-		// return res.send("WELCOME TO REST API");
 		next();
 	});
 
@@ -92,20 +79,23 @@ module.exports = function(app) {
 		
 		var token = req.params.token
 	 	var value = false;
-	 	var uid ;
-	 	var rp = require('request-promise');
-	 	rp("http://testwww.netpie.io:8080/api/tokeninfo/web/"+token)
-		 .then(function (repos) {
-	    	value = JSON.parse(repos);
-	    	uid = value.data.uid;
-	    })
-	    .catch(function (err) {
-	        // API call failed... 
-	    })
-	    .finally(function () {
-        // This is called after the request finishes either successful or not successful. 
-        	if(uid != undefined){
-        	var str_uid = new ObjectID(uid)
+	 	var uid = "592bbb5dca3368e704d17b2c";
+	 	// var rp = require('request-promise');
+	 	// rp("http://testwww.netpie.io:8080/api/tokeninfo/web/"+token)
+		 // .then(function (repos) {
+	  //   	value = JSON.parse(repos);
+	  //   	uid = value.data.uid;
+	  //   })
+	  //   .catch(function (err) {
+	  //       // API call failed... 
+	  //   })
+	  //   .finally(function () {
+   //      // This is called after the request finishes either successful or not successful. 
+   //      	if(uid != undefined){
+   //      	var str_uid = new ObjectID(uid)
+   //      }
+   //  	});
+   		    var str_uid = new ObjectID(uid)
 			var d = new Date();
         	db.collection('user_directory').findOne({uid:str_uid}, function(err,result) {     
         	if(!err) {
@@ -131,36 +121,86 @@ module.exports = function(app) {
 					if(!err){
 						var file = result.structure.file;
 						var i = file.length;
-						var j = i;
-						var ans = [];
-						var a = 0;
-						if(i >0){
+						var folder = result.structure.folder;
+
+						var j = folder.length;
+						var dataFolder = [];
+
+						var ansfile = [];
+						var ansfname = [];
+				
+						if(i > 0 || j > 0){
 							// case file at File
 							db.collection('user_file').find().toArrayAsync()
-								.then(function(doc) {
+							 	.then(function(doc) {
 								    if (doc) {
+								    	if(i > 0){
 								    	while(i--){
-								    		console.log(i)
 								    		db.collection('user_file').distinct('filename',{_id:file[i]},{uid:str_uid},(err,resp)=>{
-												ans.push(resp[0]);
-												// console.log('ans'+ans)
+												ansfile.push(resp[0]);
 											})
+								    	}}
+								    	if(j > 0){
+								    		while(j--){	
+												dataFolder.push(folder[j]);
+											}
+
 								    	}	
+
 								      return db.collection('user_file').find().toArrayAsync();
 								    }
 								})
 								.then(function(doc) {
 								    if (doc) {
-								    	result.structure.file = ans;
-							
-								    	return res.json(result)
+								    	if(file.length > 0){ 
+								    		result.structure.file = ansfile; 
+								    	}
+								    	var l = dataFolder.length;
+								    	if(l > 0){
+								    		var buffer = [];
+								    		db.collection('user_file').find().toArrayAsync()
+								    		.then((doc)=>{
+								    			if(doc){
+									    			for(var i = 0; i < l ; i++){
+									    			var m = dataFolder[i].file.length;
+									    			while(m--){
+									    				db.collection('user_file').distinct('filename',{_id:dataFolder[i].file[m]},{uid:str_uid},(err,resp)=>{
+									    					buffer.push(resp[0])
+														})
+									    			}
+								    			}
+								    			return db.collection('user_file').find().toArrayAsync();
+								    		}
+								    		}).then((doc)=>{
+								    			if(doc){
+								    				var indexBuf = 0;
+									    			for(var i = 0; i < l ; i++){
+									    			var m = dataFolder[i].file.length;
+									    			while(m--){
+									    				dataFolder[i].file[m] = buffer[indexBuf];
+									    				indexBuf += 1;
+									    			}
+									    			}
+									    			return db.collection('user_file').find().toArrayAsync();
+								    			}
+								    		}).then((doc)=>{
+								    			if(doc){
+								    				return res.json(result);
+								    				return db.collection('user_file').find().toArrayAsync();
+								    			}
+								    		})
+								    		
+								    	}else{
+								    		return res.json(result);
+								    	}
+						
 								      return db.collection('user_file').find().toArrayAsync();
 								    }
 								})
-							
-						}else{
-						return res.json(result)
-							
+								
+						}
+						else{
+							return res.json(result);	
 						}
 								
 					}else console.log('get userdata error : '+err);
@@ -169,8 +209,6 @@ module.exports = function(app) {
         	else console.log('check user error : '+err);
         	db.close();
 			});
-        }
-    	});
 		next();
 	});
 
@@ -183,7 +221,7 @@ module.exports = function(app) {
 		var date = req.params.date;
 		var usid = req.params.usid;
 		var d = new Date();
-		var fname = null;
+		var fname = 'b';
 		var sname = null;
 
 
@@ -203,6 +241,7 @@ module.exports = function(app) {
 					    	if(state == 0){
 					    		if(fname != null){
 					    			db.collection('user_directory').distinct('structure.folder.f_name',{uid:str_uid},(err,result)=>{
+	
 					    				var b = result.toString();
 			    						var c = b.split(',');
 			    						var indexF = c.indexOf(fname);
@@ -219,11 +258,6 @@ module.exports = function(app) {
 				    									})
 				    								}
 				    							})
-			    							}else if(sname == null){
-			    								db.collection('user_directory').update({uid:str_uid},{$push:{'structure.folder':{f_name:fname,file:[]}}},(err)=>{
-				    								if(err){ console.log(err); }
-				    							})
-
 			    							}
 			    							
 			    						}else{
@@ -309,4 +343,62 @@ module.exports = function(app) {
 		return res.send('success');
 		next();
 	});
+
+	app.get('/api/getallfile/:token',function(req,res,next){
+		var token = req.params.token;
+		var value = false;
+	 	var uid ;
+	 	var rp = require('request-promise');
+	 	rp("http://testwww.netpie.io:8080/api/tokeninfo/web/"+token)
+			.then(function (repos) {
+	    		value = JSON.parse(repos);
+	    		uid = value.data.uid;
+	    	})
+	    	.catch(function (err) {
+	       		// API call failed... 
+	    	})
+	    	.finally(function () {
+	    		if(uid != undefined){
+			        var str_uid = new ObjectID(uid);
+					db.collection('user_file').distinct('filename',{uid:str_uid},(err,result)=>{
+						if(err){ console.log(err)
+							return res.send('err');}
+						else{
+							return res.json(result)
+						}
+					})
+				}
+      		});
+		next();
+	})
+
+	app.post('/api/getcontent',function(req,res,next){
+		var token = req.params.token;
+		var filename = req.params.filename;
+		console.log('token'+token)
+		var rp = require('request-promise');
+	 	rp("http://testwww.netpie.io:8080/api/tokeninfo/web/"+token)
+			.then(function (repos) {
+	    		value = JSON.parse(repos);
+	    		uid = value.data.uid;
+	    	})
+	    	.catch(function (err) {
+	       		// API call failed... 
+	    	})
+	    	.finally(function () {
+	    		if(uid != undefined){
+			        var str_uid = new ObjectID(uid);
+					db.collection('user_file').distinct('content',{filename:filename,uid:str_uid},(err,result)=>{
+						if(err){ console.log(err)
+							return res.send('err');}
+						else{
+							console.log(result)
+							return res.json(result)
+						}
+					})
+				}
+      		});
+	})
+
+
 }
