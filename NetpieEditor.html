@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+
+</head>
+<body  class=" blue-grey darken-3">
+	<style type="text/css">
+		.btn-small {
+			height: 24px;
+			line-height: 24px;
+			padding: 0 0.5rem;
+		}
+		.dropdown-content {
+
+			margin: 0;
+			display: none;
+			min-width: 200px; /* Changed this to accomodate content width */
+			max-height: auto;
+			margin-left: -1px; /* Add this to keep dropdown in line with edge of navbar */
+			overflow: hidden; /* Changed this from overflow-y:auto; to overflow:hidden; */
+			opacity: 0;
+			position: absolute;
+			white-space: nowrap;
+			z-index: 1;
+			will-change: width, height;
+		}
+		#container {
+
+			position: relative;
+		}
+		#editor,
+		#infoi {
+
+			position: absolute;
+
+		}
+		#infoi {
+			z-index: 100;
+		}
+	</style>
+
+<!-- 	<ul id="slide-out" class="side-nav">
+		<li><div class="userView">
+			<div class="background teal ">
+
+			</div>
+			<a href="#!user"><img class="circle" src="https://www.atomix.com.au/media/2015/06/atomix_user31.png"></a>
+			<a href="#!name"><span class="white-text name ">user</span></a>
+			<a href="#!email"><span class="white-text email">user@gmail.com</span></a>
+		</div></li>
+		<div><li><a href="#!" style="font-size: 14px" onClick="create();" ><i class="material-icons">note_add</i>Create</a></li></div>
+		<div class=" file-field input-field" style="margin-top: -3px" >
+		<li><a href="#!" action="#" style="font-size: 14px"><i class="material-icons">note_add</i>Open file<input type="file" class="" accept='text/plain' onchange='openFile(event)'>
+		</a></li></div>
+		<li><a href="#!"  onClick="loadFromServer();" class="" style="outline:none;font-size: 14px"><i class="material-icons">view_list</i>OPEN File SERVER </a></li>
+		<li><a href="#!" onClick="yourfile();" class="" style="outline:none;font-size: 14px"><i class="material-icons">subject</i> YOUR FILES </a></li>
+		<li><a href="#!" id="create" onClick="save();" class="" style="outline:none;font-size: 14px" download="info.html"><i class="material-icons">description</i>Download file</a></li>
+		<li><div class="divider"></div></li>
+		<li><a class="subheader">Your file</a></li>
+
+
+    <ul class="collection">
+    	<li class="collection-item dismissable">
+    		<div > <a href="">kopai</a>
+    			<a href="#!" class="secondary-content"><i class="material-icons">send</i></a>
+    		</div></li>
+    		<li class="collection-item dismissable"><div>Alvin<a href="#!" class="secondary-content"><i class="material-icons">send</i></a></div></li>
+    		<div id="mySidenav" class="sidenav"></div>
+    	</ul>
+    </ul> -->
+    <nav class="nav-wrapper teal lighten-1 ">
+    	<a href="" class="brand-logo right "> Netpie Editor</a>
+    	<ul  class="left hide-on-med-and-down">
+    		<!-- <div href="#" data-activates="slide-out" class=" button-collapse waves-effect" ><i class="large material-icons  ">menu</i></div> -->
+    	<!-- <div class="nav-wrapper teal lighten-1">
+    		<a href="" class="brand-logo center  ">Netpie Editor</a>
+    		<a href="#" data-activates="slide-out" class="btn button-collapse white-text teal lighten-2" ><i class="material-icons">menu</i></a>
+    	</div>	 -->
+    	<li><a  onClick="run();" class=" blue " > Run</a></li>
+    	<li><a  onClick="clearEditor()" class="red" "> delete</a></li>
+    	<li><a href="#!" style="font-size: 14px" onClick="create();" ><i class="material-icons left">note_add</i>Create</a></li>
+    	<li><a href="" action="#" onchange='openFile(event)'>  <form action="#">
+    		<div class="file-field input-field">
+    			<div class="">
+    				<i class="material-icons left">note_add</i>
+    				Open file
+    				<input type="file">
+    			</div>
+    			<div class="file-path-wrapper">
+    			</div>
+    		</div>
+    	</form></a></li>
+    	<li><a href="#!" onClick="loadFromServer();" class="" style="outline:none;font-size: 14px"><i class="material-icons left">view_list</i>Open file server </a></li>
+
+
+    	<li><a href="#!" " onClick="yourfile();" class="" style="outline:none;font-size: 14px"><i class="material-icons left">subject</i> Your files </a></li>
+
+    	<li><a href="#!" " onClick="upload();" class="" style="outline:none;font-size: 14px"><i class="material-icons left">subject</i> Upload file </a></li>
+    		<!-- <li><a href="#!" action="#" style="font-size: 14px">
+    			<i class="material-icons left">note_add</i>
+    			Open file
+    			<input type="file" class="" onchange='openFile(event)'>
+				</a>
+			</li> -->
+
+			<li><a href="#!" id="create" onClick="save();" class="" style="outline:none;font-size: 14px" download="info.html"><i class="material-icons left">description</i>Download file</a></li>
+
+
+			<li style="margin-top: 5px"><a class=" dropdown-button" href="#!" data-activates="dropdown1" style="font-size: 18px"><i class="material-icons">settings</i></a></li>
+
+		</ul>
+    	<!-- <div class="nav-wrapper teal lighten-1">
+    		<a href="" class="brand-logo center  ">Netpie Editor</a>
+    		<a href="#" data-activates="slide-out" class="btn button-collapse white-text teal lighten-2" ><i class="material-icons">menu</i></a>
+    	</div>	 -->
+    	<ul id="dropdown1" class="dropdown-content " >
+    		<li><a   style="font-size: 14px" onclick="theme();">
+    			Change theme <i class="material-icons right">settings_brightness</i>
+    		</a></li>
+    	</ul>
+    	<ul id="nav-mobile" class="right hide-on-med-and-down">
+				<!-- 
+				<li style="margin-top: 5px"><a class=" dropdown-button" href="#!" data-activates="dropdown1" style="font-size: 18px"><i class="material-icons">settings</i></a></li> -->
+				
+				<!-- <ul id="dropdown2" class="dropdown-content " >
+					<li><a href="#!" action="#" class=" file-field input-field" style="font-size: 14px">
+
+						Open file
+						<input type="file" accept='text/plain' onchange='openFile(event)'>
+					</a></li>
+					<li>
+						<a href="#!" id="create" onClick="save();" class="teal-text text-lighten-1" style="outline:none;font-size: 14px" 
+						download="info.html">Download file</a></li>
+					</ul>
+					<a class="btn dropdown-button" href="#!" data-activates="dropdown2" style="font-size: 18px">File<i class="mdi-navigation-arrow-drop-down right"></i></a> -->
+				</ul>
+			</nav>
+		
+
+			<div class="row">
+			<div class="col s12">
+    			<ul id='tabbar' class="tabs teal">
+  				
+    			</ul>
+    		</div>
+			<div class="row " id="containe" style="margin-top: -20px">
+				<div class="col s6  ">
+					<div  id="infoi" class="col s6 offset-s5" style="margin-top: 35%;">
+						<button class="	btn btn-small teal lighten-1 waves-effect waves-light;" style="font-size: 4em" onClick="dec();" >-</button>
+						<button class="	btn btn-small teal lighten-1 waves-effect waves-light;" style="font-size: 2em" onClick="inc();" >+</button></div>
+						<div class="card " id="editor" style="width:50%;height:80%;position: fixed"></div>
+
+
+					</div>
+					<div class="col s6  ">
+						<iframe class="card blue-grey lighten-2" id="display" style="position:absolute;width:48%;height:80%;position: fixed"></iframe> 
+						
+					</div>
+
+		<!-- <div style="margin-left: 20px;margin-top: -20px">
+		<button class="	btn btn-small teal lighten-1 waves-effect waves-light;btn tooltipped" style="font-size: 3em" onClick="dec();" data-position="bottom" data-delay="10" data-tooltip="zoom Out">-</button>
+		<button class="	btn btn-small teal lighten-1 waves-effect waves-light;btn tooltipped" style="font-size: 2em" onClick="inc();" data-position="bottom" data-delay="10" data-tooltip="zoom In">+</button></div> -->
+	</div>
+	</div>
+	<!-- <div class="center container " style="margin-top: 35% " >
+		<button type="button" onClick="run();" class="btn btn-success btn-md teal lighten-1 waves-effect waves-light" style="outline:none; "> <span class="glyphicon glyphicon-play"></span> Run</button>
+		<button type="button" onClick="clearEditor()" class="btn btn-info btn-md teal lighten-1 waves-effect waves-light" style="outline:none; "> <span class="glyphicon glyphicon-info-sign"></span> Clear</button>
+	</div>  -->
+	
+	<div id="modal1" class="modal">
+		<div id="filefromserver" class="modal-content">
+			
+		</div>
+		<div class="modal-footer">
+			<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+		</div>
+	</div>    
+	<div id="modal2" class="modal">
+		<div id="yourfile" class="modal-content">
+			
+		</div>
+		<div class="modal-footer">
+			<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+		</div>
+	</div>
+
+	<script src="node_modules/monaco-editor/min/vs/loader.js"></script>
+	<script>
+		var namefile
+		var editor;
+		var allKey = []
+		var counter = 0;
+		var countfile = 0;
+		var countyourfile = 0;
+		var dataFile = [];
+		var yourFile = [];
+	function codeAddress() {
+			// console.log('s')
+	        var value = [],
+	    	keys = Object.keys(localStorage),
+	    	i = keys.length;
+	    	var indexEditor,indexFinalFile;
+	    	// console.log('key'+keys[i-1]);
+	    	while(i--){
+	    		allKey.push(keys[i])
+	    		value.push(localStorage.getItem(keys[i]))
+	    	}
+	    	indexFinalFile = allKey.indexOf('finalFile');
+	    	if(indexFinalFile != -1){
+	    		allKey.splice(indexFinalFile,1);
+		    	var j = allKey.length;
+		    	while(j--){
+		    		showkey(allKey[j])
+		    	}	
+	    	}else{
+	    		showkey('nullKey');
+	    	}
+	    }
+	    window.onload = codeAddress;
+		function showkey(allKey){
+			var data = allKey;
+			// console.log("data"+data)
+			if(allKey.includes('text01')){
+				data = allKey.substring(0,6)
+			}else if(allKey.includes('text')){
+				data = allKey.substring(0,4)
+			}
+	
+			if(data=='nullKey'){
+				var tagLi = document.createElement("li");
+				tagLi.className += 'tab col s3';
+				document.getElementById('tabbar').appendChild(tagLi);
+				var tagDiv = document.createElement("div")
+				tagLi.appendChild(tagDiv);
+				var btn = document.createElement("a");
+				btn.id = counter;
+				counter += 1;
+				btn.classname =  'editor';
+				// btn.className += "active";
+				btn.className += "waves-effect"
+				var t = document.createTextNode("Editor");
+				btn.onclick = function(){
+					var key = btn.classname;
+					var val = localStorage.getItem(key);
+					localStorage.setItem('finalFile',key);
+					editor.setValue(val)
+				}
+				btn.appendChild(t);
+				tagLi.appendChild(btn)
+			}else{
+				var tagLi = document.createElement("li");
+				tagLi.className += 'tab';
+				document.getElementById('tabbar').appendChild(tagLi);
+				// var tagDiv = document.createElement("div")
+				// tagLi.appendChild(tagDiv);
+				var btn = document.createElement("a");
+				btn.id = counter;
+				counter += 1;
+				btn.classname =  allKey;
+				btn.className += "waves-effect"  
+				// btn.className += "active";
+				var t = document.createTextNode(""+data);
+				btn.appendChild(t);
+				btn.style.cssText = 'color :white';
+				btn.onclick = function(){
+					var key = btn.classname;
+					var val = localStorage.getItem(key);
+					localStorage.setItem('finalFile',key);
+					editor.setValue(val)
+				}
+				
+				var btn2 = document.createElement("a");
+				btn2.classname =  'close';
+				btn2.className += "waves-effect";
+				var t = document.createTextNode("close ");       
+				btn2.appendChild(t);
+				btn2.style.cssText = 'float: right;color :red';
+				btn2.onclick = function(){
+					var key = btn.classname;
+					localStorage.removeItem(key);
+					btn.remove();
+					btn2.remove();
+					var finalval = localStorage.getItem('finalFile');
+					var removedata = localStorage.getItem(finalval)
+					if(removedata == null){
+						var val =  "function setup() {\n}\nfunction draw() {\n\tellipse(50,50,30,30) \n}"
+						editor.setValue(val)
+					}
+				}
+				tagLi.appendChild(btn)
+				tagLi.appendChild(btn2)
+			}
+		}
+
+		$('.button-collapse').sideNav({
+		    menuWidth: 300, // Default is 300
+		    edge: 'left', // Choose the horizontal origin
+		    closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+		    draggable: true // Choose whether you can drag to open on touch screens
+		});
+		$('.dropdown-button').dropdown({
+			inDuration: 300,
+			outDuration: 225,
+			
+			hover: true, // Activate on hover
+			belowOrigin: true, // Displays dropdown below the button
+			gutter:0,
+			alignment: 'right' // Displays dropdown with edge aligned to the left of button
+		});
+
+		require.config({ paths: { 'vs': 'node_modules/monaco-editor/min/vs' }});
+		require(['vs/editor/editor.main'], function() {
+			var val
+			var file
+			if (localStorage.getItem('finalFile') === null) {
+				val =  "function setup() {\n}\nfunction draw() {\n\tellipse(50,50,30,30) \n}"
+				// console.log(''+val)
+			}else{
+				file = localStorage.getItem('finalFile');
+				if(localStorage.getItem(file) == null){
+					val =  "function setup() {\n}\nfunction draw() {\n\tellipse(50,50,30,30) \n}"
+				}else{
+					val = localStorage.getItem(file);
+				}
+			}
+			editor = monaco.editor.create(document.getElementById('editor'), {
+				value: [
+				''+val
+				].join('\n'),
+				language: 'javascript',
+				theme: 'vs-dark',
+				fontSize : 12,
+				automaticLayout:true
+			});
+			var myBinding = editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, function() {
+				console.log('SAVE pressed!');
+			});
+			editor.onKeyDown(function (e) {
+				if (e.ctrlKey && e.keyCode === monaco.KeyCode.KEY_S) {
+					e.preventDefault();
+				}	
+			});
+			editor.onKeyUp(function (e) {
+				if (e.ctrlKey && e.keyCode === monaco.KeyCode.KEY_S) {
+					e.preventDefault();
+				}
+				var val = editor.getValue();
+				if(localStorage.getItem('finalFile') === null) {
+					localStorage.setItem('editor', val);
+				}else{
+					file = localStorage.getItem('finalFile');
+					localStorage.setItem(file, val);
+				}
+			});
+		});
+
+		function run() {
+			var jscode = '';
+			var p5code = editor.getValue();
+			if(p5code.indexOf('createCanvas') == -1){
+				var setup = p5code.indexOf('setup')+9;
+				var p5code = p5code.substr(0,setup)+'\n\tcreateCanvas(window.innerWidth, window.innerHeight);\n'							 +p5code.substr(setup+1);
+			}
+
+			jscode += '<script src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.10/p5.js"><\/script>\n';
+			jscode += '<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.10/addons/p5.dom.js"><\/script>\n';
+			jscode += '<script src="https://cdn.netpie.io/microgear.js"><\/script>\n';
+			jscode += '<script src="https://rawgit.com/bobcgausa/cook-js/master/b2.js"><\/script>\n';
+			jscode += '<script src="https://rawgit.com/bobcgausa/cook-js/master/box2d-html5.js"><\/script>\n';
+
+			jscode += '<script>'+p5code+'<\/script>';
+
+			var iframe = document.getElementById('display');
+			iframe.src = "data:text/html;charset=utf-8," + escape(jscode);
+			iframe.src = iframe.src;
+
+		}
+		function clearEditor(){
+			if(confirm("Are you sure?")==true){
+				editor.setValue("")
+			}
+			else{
+
+			}
+		}
+
+		//download file
+		function save () {
+			run()
+
+			var textFile = null;
+
+			var makeTextFile = function (text) {
+				// console.log("connect function run");
+				var data = new Blob([text], {type: 'text/plain'});
+				console.log(data);
+				if (textFile !== null) {
+					window.URL.revokeObjectURL(textFile);
+				}
+				textFile = window.URL.createObjectURL(data);
+				return textFile;
+			};
+
+			var create = document.getElementById('create'),
+			textbox = document.getElementById('textbox');
+
+			var a = unescape(parent.document.getElementById('display').src);
+			var b = a.substring(29);
+
+			var link = document.getElementById('create');
+			link.href = makeTextFile(""+b);
+			link.style.display = 'block';
+
+		}
+
+		//upload file
+		var openFile = function(event) {
+			var input = event.target;
+			var reader = new FileReader();
+			reader.onload = function(){
+				var text = reader.result;
+				namefile = input.files[0].name;
+				editor.setValue(text)
+				var val = editor.getValue(); 
+				localStorage.setItem(namefile, val);
+				localStorage.setItem('finalFile',namefile);
+			};
+			reader.readAsText(input.files[0]);
+			namefile = input.files[0].name;
+			var allKey = [],
+			keys = Object.keys(localStorage),
+			i = keys.length;
+			while(i--){
+				allKey.push(keys[i])
+			}
+			if(allKey.indexOf(namefile) == -1){
+				showkey(namefile)
+			}
+		};
+
+		//increat fontsize
+		function inc(){
+			var position = editor.getConfiguration()
+			var val = (position.fontInfo.fontSize)+2;
+			editor.updateOptions({fontSize:val})
+		}
+
+		//decreat fontsize
+		function dec(){
+			var position = editor.getConfiguration()
+			var val = (position.fontInfo.fontSize)-2;
+			editor.updateOptions({fontSize:val})
+		}
+
+		//change theme
+		function theme(){ 
+			var position = editor.getConfiguration()
+			var val = position.viewInfo.theme
+			if(val == 'vs-dark'){
+				val = 'vs'
+			}else{
+				val = 'vs-dark'
+			}
+			editor.updateOptions({theme:val})
+		}
+
+		//create new file
+		function create(){ 
+			var txt;
+			var person = prompt("Please enter your name file:", "text01");
+			if (person == null || person == "") {
+				txt = "text";
+			}else{
+				txt = person
+			}
+			var allKey = [],
+			keys = Object.keys(localStorage),
+			i = keys.length;
+			while(i--){
+				allKey.push(keys[i])
+			}
+			if(allKey.indexOf(txt) == -1){
+				localStorage.setItem(txt,"");
+				var val = localStorage.getItem(txt);
+				editor.setValue(val);
+				var vals = editor.getValue(); 
+				localStorage.setItem(txt, vals);
+				localStorage.setItem('finalFile',txt);
+				showkey(txt)
+			}else{
+				var random = Math.floor(Math.random()*1000).toString()
+				txt += random;
+				localStorage.setItem(txt,"");
+				var val = localStorage.getItem(txt);
+				editor.setValue(val);
+				var vals = editor.getValue(); 
+				localStorage.setItem(txt, vals);
+				localStorage.setItem('finalFile',txt);
+				showkey(txt)
+			}
+		}
+
+		$(document).ready(function(){
+    		// the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+    		$('.modal').modal();
+    	});
+
+		function loadFromServer(){
+			var token = 'L1m5ysh8yL0Vq3aJosMxoRDXJ5Urv4UI';
+			var url = 'http://localhost:8000/api/getallfile/';
+			$.get(url+token,function(data){
+				$('#modal1').modal('open');
+				var i = data.length;
+				var count = 0;
+				while(i--){
+					if(dataFile.indexOf(data[i]) == -1){
+						dataFile.push(data[i]);
+						count +=1;
+					}
+				}
+				var j = dataFile.length;
+				while(count--){
+					j -= 1;
+					// console.log(count);
+					createAllFile(dataFile[j]);
+				}
+			})
+			return false;
+		}
+
+		function createAllFile(file){
+			console.log(file)
+			var tagLi = document.createElement("li");
+			tagLi.id = 'litag'
+			document.getElementById('filefromserver').appendChild(tagLi);
+			var tagDiv = document.createElement("div")
+			tagLi.appendChild(tagDiv);
+			var btn = document.createElement("a");
+			btn.id = countfile;
+			countfile += 1;
+			btn.classname =  file;
+			btn.className += "modal-action modal-close waves-effect waves-green btn-flat";
+			var t = document.createTextNode(""+file);
+			btn.appendChild(t);
+			btn.onclick = function(){
+				var resource = btn.classname;
+				var token = 'L1m5ysh8yL0Vq3aJosMxoRDXJ5Urv4UI';
+				var url = 'http://localhost:8000/api/getcontent/';
+				$.post(url,{token:token,filename:resource},(data)=>{
+					// console.log(data);
+					editor.setValue(data[0]);
+					$('#modal1').modal('close');
+					var val = editor.getValue(); 
+					localStorage.setItem(resource, val);
+					localStorage.setItem('finalFile',resource);
+				})
+				var allKey = [],
+				keys = Object.keys(localStorage),
+				i = keys.length;
+				while(i--){
+					allKey.push(keys[i])
+				}
+	    		// console.log(allKey)
+	    		if(allKey.indexOf(resource) == -1){
+	    			showkey(resource)
+	    		}
+	    	}
+	    	tagDiv.appendChild(btn)
+	    }
+
+		function yourfile(){
+			$('#modal2').modal('open');
+			var allKey = [],
+			keys = Object.keys(localStorage),
+			i = keys.length;
+			while(i--){
+				allKey.push(keys[i])
+			}
+			indexEditor = allKey.indexOf('editor');
+			indexFinalFile = allKey.indexOf('finalFile');
+			if(indexEditor != -1 || indexFinalFile != -1){
+				if(indexEditor != -1 && indexFinalFile != -1){
+					allKey.splice(indexEditor,1);
+					allKey.splice(indexFinalFile,1);
+				}else if(indexEditor != -1){
+					allKey.splice(indexEditor,1);
+				}else if(indexFinalFile != -1){
+					allKey.splice(indexFinalFile,1);
+				}
+
+				var j = allKey.length;
+				var count = 0;
+				while(j--){
+					if(yourFile.indexOf(allKey[j]) == -1){
+						yourFile.push(allKey[j]);
+						count +=1;
+					}
+					console.log(yourFile)
+				}
+				var i = yourFile.length;
+				while(count--){
+					i -= 1;
+		
+					createYourFile(yourFile[i])
+				}	
+			}
+			console.log(allKey)
+		}
+
+		function createYourFile(file){
+			var tagLi = document.createElement("li");
+			tagLi.id = 'litag'
+			document.getElementById('yourfile').appendChild(tagLi);
+			var tagDiv = document.createElement("div")
+			tagLi.appendChild(tagDiv);
+			var btn = document.createElement("a");
+			btn.id = countyourfile;
+			countyourfile += 1;
+			btn.classname =  file;
+			btn.className += "modal-action modal-close waves-effect waves-green btn-flat";
+			var t = document.createTextNode(""+file);
+			btn.appendChild(t);
+			btn.onclick = function(){
+				var key = btn.classname;
+				var val = localStorage.getItem(key);
+				localStorage.setItem('finalFile',key);
+				editor.setValue(val)
+				$('#modal2').modal('close');
+			}
+			var btn2 = document.createElement("a");
+			btn2.classname =  'close';
+			btn2.className += "modal-action modal-close waves-effect waves-green btn-flat";
+			var t = document.createTextNode("close ");  
+			btn2.appendChild(t);
+			btn2.style.cssText = 'float: right;color :red';
+			btn2.onclick = function(){
+				var key = btn.classname;
+				localStorage.removeItem(key);
+				btn.remove();
+				btn2.remove();
+				tagDiv.remove();
+				tagLi.remove();
+				var finalval = localStorage.getItem('finalFile');
+				var removedata = localStorage.getItem(finalval)
+				if(removedata == null){
+					var val =  "function setup() {\n}\nfunction draw() {\n\tellipse(50,50,30,30) \n}"
+					editor.setValue(val)
+				}
+				$('#modal2').modal('close');
+			}
+			tagDiv.appendChild(btn)
+			tagDiv.appendChild(btn2)
+		}
+
+		function upload(){
+			run()
+
+			var filename =  localStorage.getItem('finalFile');
+			var b = editor.getValue();
+			var d = new Date();
+			var uid = '595b5c25df94b3114ccbe448';
+
+			// var url = 'http://localhost:8000/api/uploadfile';
+			// $.post(url,{fileName:filename,contents:b,date:d,usid:uid},function(data){
+			// 	console.log('data'+data.files)
+			// })
+
+			var url = 'http://localhost:8000/api/upload';
+			$.post(url,{fileName:filename,contents:b,date:d,usid:uid},function(data){
+				console.log('data'+data)
+			})
+		}
+
+
+	</script>
+</body>
+</html>
