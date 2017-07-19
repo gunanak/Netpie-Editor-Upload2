@@ -1,0 +1,36 @@
+function setup() {
+	createCanvas(590, 480);
+	b2newWorld(30, createVector(0, 9.8));
+	var body = new b2Body('box', false, createVector(width / 2, height - 2), createVector(width,5));
+	body.display(attr, 0);
+}
+function draw() {
+	background(227);
+	b2Update();
+	b2Draw(false); //no debugging
+}
+function mousePressed() {
+	var body;
+	if (random() < 0.3) {
+		body = new b2Body('box', true, createVector(width / 2, 0), createVector(20,10));
+		body.display(attr, 0); //shape index 0
+	}
+	else if (random() < 0.6) { //w is the circle's diameter
+		body=new b2Body('circle', true, createVector(width / 2, 0), createVector(20,10));
+		body.display(attr, 0);
+	}
+	else {
+		body=new b2Body('box', true, createVector(width / 2, 0), createVector(20,10));
+		body.display(attr1, 0);
+	}
+}
+function attr(body, fixture, position) { 
+	if (body.type(0) == 'box') fill(255,0,0);
+	else fill(0,0,255);
+	b2Display(body, fixture, position);
+}
+
+function attr1(body, fixture, position) { 
+	fill(0,255,0);
+	ellipse(position.x, position.y, body.wh(0).x, body.wh(0).y);
+}

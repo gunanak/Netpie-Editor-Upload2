@@ -1,0 +1,26 @@
+var microgear, button;
+
+function onMessage(topic, msg) {
+	alert('I got a message ---> '+msg);
+}
+
+function buttonPressed() {
+	microgear.chat('p5js','Hello from p5js button');
+}
+
+function setup() {
+	createCanvas(710, 400);
+
+	button = createButton('Send Message to NETPIE');
+	button.position(10,10);
+	button.mousePressed(buttonPressed);
+
+	microgear = Microgear.create({key:'3oEg1M5ATtWilmf', secret:'cbSZRd4ejBnIa49exoNXMTmLr', alias:'p5js'});
+	microgear.on('message',onMessage);
+	microgear.connect('deerdev');
+}
+
+function draw() {
+
+
+}	
