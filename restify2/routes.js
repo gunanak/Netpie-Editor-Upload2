@@ -378,12 +378,30 @@ module.exports = function(app) {
 		var filename = req.params.fileName;
 		var contents = req.params.contents;
 		var date = req.params.date;
-		var usid = req.params.usid;
-		var d = new Date();
-		var fname = 'B';
-		var sname = 'C';
+		var token = req.params.token
+		var fname = null;
+		var sname = null;
 
-		db.collection('user_file').findOne({uid:str_uid,filename:filename},(err,result)=>{
+
+			
+		console.log("toKen:"+token)
+	 	var value = false;
+	 	var uid ;
+	 	var rp = require('request-promise');
+	 	rp("http://testwww.netpie.io:8080/api/tokeninfo/web/"+token)
+		 .then(function (repos) {
+	    	value = JSON.parse(repos);
+	    	uid = value.data.uid;
+	    })
+	    .catch(function (err) {
+	        // API call failed... 
+	    })
+	    .finally(function () {
+        // This is called after the request finishes either successful or not successful.
+        if(uid != undefined){
+        	var str_uid = new ObjectID(uid)
+			var d = new Date();
+			db.collection('user_file').findOne({uid:str_uid,filename:filename},(err,result)=>{
 			if(err){console.log(err)}
 			else{
 				if(result != null){
@@ -498,6 +516,12 @@ module.exports = function(app) {
 				}
 			}
 		})
+        }
+    	});
+
+
+
+		
 		return res.send('success');
 		next();
 	});
