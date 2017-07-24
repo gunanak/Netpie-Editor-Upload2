@@ -8,7 +8,7 @@
 	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
+	<link rel="shortcut icon" href="">
 
 
 </head>
@@ -290,7 +290,7 @@
 					console.log(auth.data.fullname)
 					document.getElementById("userfullname").innerHTML = auth.data.fullname
 					console.log(auth.token)
-					$.get("http://localhost:8000/api/checklogin/"+auth.token,(data,status)=>{
+					$.get("http://localhost:8800/api/checklogin/"+auth.token,(data,status)=>{
 						console.log('data'+data)
 					})
 					// .error(
@@ -628,7 +628,7 @@
 			else{
 				gettoken()
 				console.log('loadFromserver');
-				var url = 'http://localhost:8000/api/getallfile/';
+				var url = 'http://localhost:8800/api/getallfile/';
 				$.get(url+auth.token,function(data){
 					console.log(data)
 					console.log(data.structure.folder)
@@ -709,7 +709,7 @@
 				gettoken()
 				var resource = btn.classname;
 				
-				var url = 'http://localhost:8000/api/getcontent';
+				var url = 'http://localhost:8800/api/getcontent';
 				$.post(url,{token:auth.token,filename:resource},(data)=>{
 					 console.log(data);
 					editor.setValue(data[0]);
@@ -738,7 +738,7 @@
 			btn2.onclick = function(){
 				gettoken()
 				var resource = btn.classname;
-				var url ='http://localhost:8000/api/deletefile';
+				var url ='http://localhost:8800/api/deletefile';
 				$.post(url,{token:auth.token,filename:resource},(data)=>{})
 				$('#modal1').modal('close');
 			}
@@ -847,7 +847,7 @@
 						var d = new Date();
 						//var uid = '595b5c25df94b3114ccbe448';
 
-						var url = 'http://localhost:8000/api/upload';
+						var url = 'http://localhost:8800/api/upload';
 							$.post(url,{fileName:filename,contents:b,date:d,token:auth.token,fname:document.getElementById("foldername").value,sname:document.getElementById("subfoldername").value },function(data){
 								console.log('data'+data)
 								$('#modalup').modal('close');
@@ -867,7 +867,7 @@
 				setTimeout(function(){
 					console.log("ok i got token :"+auth.token)
 					var filename =  localStorage.getItem('finalFile');;
-					var url = 'http://localhost:8000/api/deletefile';
+					var url = 'http://localhost:8800/api/deletefile';
 					$.post(url,{token:auth.token,filename:filename},function(data){
 						console.log('data'+data)}).fail(function(xhr, status, error) {});
 				}, 2000);
