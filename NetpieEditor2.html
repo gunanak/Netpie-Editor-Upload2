@@ -102,7 +102,6 @@
     		</div>
     	</form></a></li>
 
-    	<li><a href="#!" onClick="deletefile();" class="" style="outline:none;font-size: 14px"><i class="material-icons left">delete</i>Delete</a></li>
 
     	<li><a href="#!" onClick="loadFromServer();" class="" style="outline:none;font-size: 14px"><i class="material-icons left">view_list</i>Open file server </a></li>
 
@@ -311,7 +310,7 @@
 
 	function codeAddress() {
 			// console.log('s')
-			$.getJSON("generated.json", function(json) {console.log(json);});
+			
 			$('#mlogin').modal('open');
 	        var value = [],
 	    	keys = Object.keys(localStorage),
@@ -634,7 +633,7 @@
 					console.log(data)
 					console.log(data.structure.folder)
 					$('#modal1').modal('open');
-					document.getElementById("filefromserver").innerHTML="your file"
+					document.getElementById("filefromserver").innerHTML="your file<br>"
 					for(var i=0;i<data.structure.file.length;i++){
 						createAllFile(data.structure.file[i]);
 					}
@@ -730,7 +729,22 @@
 	    			showkey(resource)
 	    		}
 	    	}
+	    	var btn2 = document.createElement("a");
+			btn2.classname =  'close';
+			btn2.className += "modal-action modal-close waves-effect waves-green btn-flat";
+			var t = document.createTextNode("close ");  
+			btn2.appendChild(t);
+			btn2.style.cssText = 'float: right;color :red';
+			btn2.onclick = function(){
+				gettoken()
+				var resource = btn.classname;
+				var url ='http://localhost:8000/api/deletefile';
+				$.post(url,{token:auth.token,filename:resource},(data)=>{})
+				$('#modal1').modal('close');
+			}
+
 	    	tagDiv.appendChild(btn)
+	    	tagDiv.appendChild(btn2)
 	    }
 
 		function yourfile(){
@@ -815,6 +829,7 @@
 			}
 			tagDiv.appendChild(btn)
 			tagDiv.appendChild(btn2)
+
 		}
 
 		function upload(){
