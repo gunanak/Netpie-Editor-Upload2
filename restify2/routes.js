@@ -78,7 +78,7 @@ module.exports = function(app) {
 	app.get('/api/checklogin/:token', function(req, res, next) {
 		
 		var token = req.params.token
-		// console.log("toKen:"+token)
+		console.log("toKen:"+token)
 	 	var value = false;
 	 	var uid ;
 	 	var rp = require('request-promise');
@@ -393,32 +393,7 @@ module.exports = function(app) {
 	});
 
 	app.get('/api/getallfile/:token',function(req,res,next){
-		// var token = req.params.token;
-		// console.log('token'+token);
-		// var value = false;
-	 // 	var uid ;
-	 // 	var rp = require('request-promise');
-	 // 	rp("http://testwww.netpie.io:8080/api/tokeninfo/web/"+token)
-		// 	.then(function (repos) {
-	 //    		value = JSON.parse(repos);
-	 //    		uid = value.data.uid;
-	 //    	})
-	 //    	.catch(function (err) {
-	 //       		// API call failed... 
-	 //    	})
-	 //    	.finally(function () {
-	 //    		if(uid != undefined){
-		// 	        var str_uid = new ObjectID(uid);
-		// 			db.collection('user_file').distinct('filename',{uid:str_uid},(err,result)=>{
-		// 				if(err){ console.log(err)
-		// 					return res.send('err');}
-		// 				else{
-		// 					console.log('result'+result)
-		// 					return res.json(result)
-		// 				}
-		// 			})
-		// 		}
-  //     		});
+	
   		var token = req.params.token
 		console.log("toKen:"+token)
 	 	var value = false;
