@@ -101,12 +101,15 @@
     			</div>
     		</div>
     	</form></a></li>
+
+    	<li><a href="#!" onClick="deletefile();" class="" style="outline:none;font-size: 14px"><i class="material-icons left">delete</i>Delete</a></li>
+
     	<li><a href="#!" onClick="loadFromServer();" class="" style="outline:none;font-size: 14px"><i class="material-icons left">view_list</i>Open file server </a></li>
 
 
     	<li><a href="#!" " onClick="yourfile();" class="" style="outline:none;font-size: 14px"><i class="material-icons left">subject</i> Your files </a></li>
 
-    	<li><a href="#!" " onClick="upload();" class="" style="outline:none;font-size: 14px"><i class="material-icons left">subject</i> Upload file </a></li>
+    	<li><a href="#!" " onClick="$('#modalup').modal('open')" class="" style="outline:none;font-size: 14px"><i class="material-icons left">subject</i> Upload file </a></li>
     		<!-- <li><a href="#!" action="#" style="font-size: 14px">
     			<i class="material-icons left">note_add</i>
     			Open file
@@ -201,6 +204,27 @@
 
 
 
+	<div id="modalup" class="modal">
+	<p>sellect folder</p>
+		<div class="modal-content">
+			<div class="row">
+				<div class="input-field ">
+					<input id="foldername" type="text" class="validate" >
+					<label for="text">folder name</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field ">
+					<input id="subfoldername" type="text" class="validate" >
+					<label for="text">subfolder name</label>
+				</div>
+			</div>
+			<button type="button" class="btn right" onclick="upload()">Upload file</button>
+		</div>
+	</div>
+
+
+
 
 	<div id="modallog" class="modal">
 		<div class="modal-content">
@@ -239,8 +263,8 @@
 		var auth
 		
 		var username
-		var password
-		function gettoken(){
+		var passwordlo
+		var gettoken = function (){
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -268,7 +292,7 @@
 					document.getElementById("userfullname").innerHTML = auth.data.fullname
 					console.log(auth.token)
 					$.get("http://localhost:8000/api/checklogin/"+auth.token,(data,status)=>{
-						console.log('data'+data.structure.file)
+						console.log('data'+data)
 					})
 					// .error(
 					// 	function(){
@@ -320,68 +344,68 @@
 			}
 	
 			if(data=='nullKey'){
-				var tagLi = document.createElement("li");
-				tagLi.className += 'tab col s3';
-				document.getElementById('tabbar').appendChild(tagLi);
-				var tagDiv = document.createElement("div")
-				tagLi.appendChild(tagDiv);
-				var btn = document.createElement("a");
-				btn.id = counter;
-				counter += 1;
-				btn.classname =  'editor';
-				// btn.className += "active";
-				btn.className += "waves-effect"
-				var t = document.createTextNode("Editor");
-				btn.onclick = function(){
-					var key = btn.classname;
-					var val = localStorage.getItem(key);
-					localStorage.setItem('finalFile',key);
-					editor.setValue(val)
-				}
-				btn.appendChild(t);
-				tagLi.appendChild(btn)
-			}else{
-				var tagLi = document.createElement("li");
-				tagLi.className += 'tab';
-				// document.getElementById('tabbar').appendChild(tagLi);
-				// var tagDiv = document.createElement("div")
-				// tagLi.appendChild(tagDiv);
-				var btn = document.createElement("a");
-				btn.id = counter;
-				counter += 1;
-				btn.classname =  allKey;
-				btn.className += "waves-effect"  
-				// btn.className += "active";
-				var t = document.createTextNode(""+data);
-				btn.appendChild(t);
-				btn.style.cssText = 'color :white';
-				btn.onclick = function(){
-					var key = btn.classname;
-					var val = localStorage.getItem(key);
-					localStorage.setItem('finalFile',key);
-					editor.setValue(val)
-				}
+			// 	var tagLi = document.createElement("li");
+			// 	tagLi.className += 'tab col s3';
+			// 	document.getElementById('tabbar').appendChild(tagLi);
+			// 	var tagDiv = document.createElement("div")
+			// 	tagLi.appendChild(tagDiv);
+			// 	var btn = document.createElement("a");
+			// 	btn.id = counter;
+			// 	counter += 1;
+			// 	btn.classname =  'editor';
+			// 	// btn.className += "active";
+			// 	btn.className += "waves-effect"
+			// 	var t = document.createTextNode("Editor");
+			// 	btn.onclick = function(){
+			// 		var key = btn.classname;
+			// 		var val = localStorage.getItem(key);
+			// 		localStorage.setItem('finalFile',key);
+			// 		editor.setValue(val)
+			// 	}
+			// 	btn.appendChild(t);
+			// 	tagLi.appendChild(btn)
+			// }else{
+			// 	var tagLi = document.createElement("li");
+			// 	tagLi.className += 'tab';
+			// 	// document.getElementById('tabbar').appendChild(tagLi);
+			// 	// var tagDiv = document.createElement("div")
+			// 	// tagLi.appendChild(tagDiv);
+			// 	var btn = document.createElement("a");
+			// 	btn.id = counter;
+			// 	counter += 1;
+			// 	btn.classname =  allKey;
+			// 	btn.className += "waves-effect"  
+			// 	// btn.className += "active";
+			// 	var t = document.createTextNode(""+data);
+			// 	btn.appendChild(t);
+			// 	btn.style.cssText = 'color :white';
+			// 	btn.onclick = function(){
+			// 		var key = btn.classname;
+			// 		var val = localStorage.getItem(key);
+			// 		localStorage.setItem('finalFile',key);
+			// 		editor.setValue(val)
+			// 	}
 				
-				var btn2 = document.createElement("a");
-				btn2.classname =  'close';
-				btn2.className += "waves-effect";
-				var t = document.createTextNode("close ");       
-				btn2.appendChild(t);
-				btn2.style.cssText = 'float: right;color :red';
-				btn2.onclick = function(){
-					var key = btn.classname;
-					localStorage.removeItem(key);
-					btn.remove();
-					btn2.remove();
-					var finalval = localStorage.getItem('finalFile');
-					var removedata = localStorage.getItem(finalval)
-					if(removedata == null){
-						var val =  "function setup() {\n}\nfunction draw() {\n\tellipse(50,50,30,30) \n}"
-						editor.setValue(val)
-					}
-				}
-				tagLi.appendChild(btn)
-				tagLi.appendChild(btn2)
+			// 	var btn2 = document.createElement("a");
+			// 	btn2.classname =  'close';
+			// 	btn2.className += "waves-effect";
+			// 	var t = document.createTextNode("close ");       
+			// 	btn2.appendChild(t);
+			// 	btn2.style.cssText = 'float: right;color :red';
+			// 	btn2.onclick = function(){
+			// 		var key = btn.classname;
+			// 		localStorage.removeItem(key);
+			// 		btn.remove();
+			// 		btn2.remove();
+			// 		var finalval = localStorage.getItem('finalFile');
+			// 		var removedata = localStorage.getItem(finalval)
+			// 		if(removedata == null){
+			// 			var val =  "function setup() {\n}\nfunction draw() {\n\tellipse(50,50,30,30) \n}"
+			// 			editor.setValue(val)
+			// 		}
+			// 	}
+			// 	tagLi.appendChild(btn)
+			// 	tagLi.appendChild(btn2)
 			}
 		}
 
@@ -599,6 +623,7 @@
     	});
 
 		function loadFromServer(){
+			var checkSub
 			if(!auth)
 				{$('#modallog').modal('open');}
 			else{
@@ -606,7 +631,42 @@
 				console.log('loadFromserver');
 				var url = 'http://localhost:8000/api/getallfile/';
 				$.get(url+auth.token,function(data){
+					console.log(data)
+					console.log(data.structure.folder)
 					$('#modal1').modal('open');
+					document.getElementById("filefromserver").innerHTML="your file"
+					for(var i=0;i<data.structure.file.length;i++){
+						createAllFile(data.structure.file[i]);
+					}
+					for(var i=0;i<data.structure.folder.length;i++){
+						document.getElementById("filefromserver").appendChild(document.createTextNode(data.structure.folder[i].f_name))
+						checkSub=data.structure.folder[i].subfolder
+						console.log(checkSub)
+						
+						for(var j=0;j<data.structure.folder[i].file.length;j++){
+							createAllFile(data.structure.folder[i].file[j]);
+
+						}
+						if(checkSub){
+							for(var j=0;j<data.structure.folder[i].subfolder.length;j++){
+								var subfol=document.createElement("dd")
+								var text00=document.createTextNode(data.structure.folder[i].subfolder[j].s_name)
+								subfol.appendChild(text00)
+								document.getElementById("filefromserver").appendChild(subfol)
+								for(var k=0;k<data.structure.folder[i].subfolder[j].file.length;k++){
+									createAllFile(data.structure.folder[i].subfolder[j].file[k]);
+								}
+
+
+							}
+						}
+
+						// for(var j=0;j<data.structure.folder[i].subfolder.length;j++){
+
+						// }
+
+					}
+
 					var i = data.length;
 					var count = 0;
 					while(i--){
@@ -620,7 +680,7 @@
 					while(count--){
 						j -= 1;
 					// console.log(count);
-					createAllFile(dataFile[j]);
+					createAllFile(data.structure.file[j]);
 				}
 			}).fail(function(xhr, status, error) {
 
@@ -631,10 +691,12 @@
 
 		function createAllFile(file){
 			console.log(file)
-			var tagLi = document.createElement("li");
+			var tagLi = document.createElement("dd");
 			tagLi.id = 'litag'
+
 			document.getElementById('filefromserver').appendChild(tagLi);
 			var tagDiv = document.createElement("div")
+			
 			tagLi.appendChild(tagDiv);
 			var btn = document.createElement("a");
 			btn.id = countfile;
@@ -642,13 +704,15 @@
 			btn.classname =  file;
 			btn.className += "modal-action modal-close waves-effect waves-green btn-flat";
 			var t = document.createTextNode(""+file);
+			
 			btn.appendChild(t);
 			btn.onclick = function(){
+				gettoken()
 				var resource = btn.classname;
-				var token = 'L1m5ysh8yL0Vq3aJosMxoRDXJ5Urv4UI';
-				var url = 'http://localhost:8000/api/getcontent/';
-				$.post(url,{token:token,filename:resource},(data)=>{
-					// console.log(data);
+				
+				var url = 'http://localhost:8000/api/getcontent';
+				$.post(url,{token:auth.token,filename:resource},(data)=>{
+					 console.log(data);
 					editor.setValue(data[0]);
 					$('#modal1').modal('close');
 					var val = editor.getValue(); 
@@ -758,20 +822,43 @@
 				{$('#modallog').modal('open');}
 
 			else{
-				gettoken()
-				run()
-				console.log("ok i got token :"+auth.token)
-				var filename =  localStorage.getItem('finalFile');
-				var a = unescape(parent.document.getElementById('display').src);
-				var b = a.substring(29);
-				var d = new Date();
-				//var uid = '595b5c25df94b3114ccbe448';
 
-				var url = 'http://localhost:8000/api/uploadfile';
-				$.post(url,{fileName:filename,contents:b,date:d,token:auth.token},function(data){
-					console.log('data'+data.files)}).fail(function(xhr, status, error) {});
+					gettoken();
+					setTimeout(function(){ 
+						run()
+						console.log("ok i got token :"+auth.token)
+						var filename =  localStorage.getItem('finalFile');
+						var b = editor.getValue();
+						var d = new Date();
+						//var uid = '595b5c25df94b3114ccbe448';
+
+						var url = 'http://localhost:8000/api/upload';
+							$.post(url,{fileName:filename,contents:b,date:d,token:auth.token,fname:document.getElementById("foldername").value,sname:document.getElementById("subfoldername").value },function(data){
+								console.log('data'+data)
+								$('#modalup').modal('close');
+							}).fail(function(xhr, status, error)
+								 {});
+
+					}, 1000);
+
 				}
 			}
+
+		function deletefile(){
+			if(!auth)
+				{$('#modallog').modal('open');}
+			else{
+				gettoken()
+				setTimeout(function(){
+					console.log("ok i got token :"+auth.token)
+					var filename =  localStorage.getItem('finalFile');;
+					var url = 'http://localhost:8000/api/deletefile';
+					$.post(url,{token:auth.token,filename:filename},function(data){
+						console.log('data'+data)}).fail(function(xhr, status, error) {});
+				}, 2000);
+				
+			}
+		}
 	</script>
 </body>
 </html>
