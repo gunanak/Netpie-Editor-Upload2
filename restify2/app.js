@@ -606,7 +606,7 @@ server.get('/.*/', restify.plugins.serveStatic({
 	default: 'NetpieEditor2.html'
 }));
 
-server.listen(8000,function(){
+server.listen(8800,function(){
 	console.log('server listening on port number',server.url);
 });
 var routes = require('./routes')(server);
